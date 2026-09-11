@@ -35,13 +35,13 @@
 	line-height: 1.2;
 }
 
-/* 2. Intro paragraph -> new copy. \A + pre-line gives the line break. */
+/* 2. Intro paragraph -> new copy. \A\A + pre-line gives the blank line. */
 #verfificationContainer .mpp-innerpage p {
 	font-size: 0 !important;
 	margin: 0 0 1rem !important;
 }
 #verfificationContainer .mpp-innerpage p::after {
-	content: "Let's help your first Sunday go smoothly. If you'll be checking kids in to Kid's Quest or Access, this is the perfect place to start — just let us know you're coming.\A To get started, what's your name and email address?";
+	content: "Let's help your first Sunday go smoothly. If you'll be checking someone in to Kid's Quest or Access, this is the perfect place to start. We'll get you set up so that once you arrive at church, you'll already be easy to find in our check-in system.\A\A To get started, what's your name and email address?";
 	display: block;
 	font-size: 1rem;
 	line-height: 1.5;
