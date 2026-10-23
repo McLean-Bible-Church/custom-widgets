@@ -79,12 +79,12 @@
   }
 
   // Params end up in an HTML attribute and in the stored-proc call, so only
-  // accept the exact shapes we use: M/D/YYYY dates and numeric IDs.
+  // accept the exact shapes we use: M/D/YYYY dates and numeric IDs (or lists).
   function isValidParam(key, value) {
     const k = String(key).replace(/^@+/, "");
     const v = String(value ?? "").trim();
     if (k === "Date") return /^\d{1,2}\/\d{1,2}\/\d{4}$/.test(v);
-    return /^\d+$/.test(v);
+    return /^\d+(,\d+)*$/.test(v); // one ID or a comma-separated list
   }
 
   function cleanMap(map) {
