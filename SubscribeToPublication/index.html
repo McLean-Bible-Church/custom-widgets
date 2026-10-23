@@ -155,11 +155,25 @@ html, body {
 (function () {
   /* ── Config from URL params (set by parent page) ── */
   const params = new URLSearchParams(window.location.search);
+  // The page posts visitors' names and emails, so never let a link choose
+  // where they go: fixed host, numeric IDs, and a return URL on our own sites.
+  const ALLOWED_HOSTS = ["my.mcleanbible.org"];
+  const digitsOr = (v, fallback) => (/^\d+$/.test(v || "") ? v : fallback);
+  function safeReturnUrl(v) {
+    try {
+      const u = new URL(v);
+      const ok = u.protocol === "https:" &&
+        (u.hostname === "mcleanbible.org" || u.hostname.endsWith(".mcleanbible.org"));
+      return ok ? u.href : "";
+    } catch {
+      return "";
+    }
+  }
   const CONFIG = {
-    host: params.get("host") || "my.mcleanbible.org",
-    publicationId: params.get("publicationId") || "131",
-    templateId: params.get("templateId") || "84102",
-    returnUrl: params.get("returnUrl") || "",
+    host: ALLOWED_HOSTS.includes(params.get("host")) ? params.get("host") : ALLOWED_HOSTS[0],
+    publicationId: digitsOr(params.get("publicationId"), "131"),
+    templateId: digitsOr(params.get("templateId"), "84102"),
+    returnUrl: safeReturnUrl(params.get("returnUrl") || ""),
   };
 
   const WIDGETS_BASE = "https://" + CONFIG.host + "/widgets";

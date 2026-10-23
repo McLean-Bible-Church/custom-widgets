@@ -116,9 +116,6 @@
     var claims = decodeJwt(token);
     if (!claims) throw new Error("Invalid token");
 
-    // Log claims so we can see what's available
-    console.log("[PrayerWidget] JWT claims:", JSON.stringify(claims, null, 2));
-
     // Try to get Contact_ID directly from claims (avoids dp_Users query entirely)
     var contactId = claims["http://www.thinkministry.com/dataplatform/claims/contactid"]
                  || claims.contactid;
@@ -190,10 +187,9 @@
       console.log("[PrayerWidget] Auth check (Role " + AUTH_ROLE_ID + "):", authorized);
       return authorized;
     } catch (e) {
+      // Fail closed: if we can't confirm the role, don't show prayer requests.
       console.warn("[PrayerWidget] dp_User_Roles check failed:", e.message);
-      // TEMP: bypass auth so we can test the rest of the widget
-      console.log("[PrayerWidget] Auth bypassed due to error — fix before production");
-      return true;
+      return false;
     }
   }
 
@@ -215,7 +211,6 @@
       "&$orderby=Field_Order"
     ) || [];
 
-    console.log("[PrayerWidget] Form fields:", JSON.stringify(formFields));
 
     // 3. Auto-detect the "name" and "request" fields by label keywords
     formFields.forEach(function (f) {

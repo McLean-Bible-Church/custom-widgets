@@ -8,7 +8,7 @@
   <select id="eventPicker">
     <option value="">All Events</option>
     {% for event in DataSet1 %}
-      <option value="{{ event.Event_ID }}">{{ event.Event_Title }}</option>
+      <option value="{{ event.Event_ID | escape }}">{{ event.Event_Title | escape }}</option>
     {% endfor %}
   </select>
 </div>
@@ -24,11 +24,11 @@
 
       {% assign currentEventID = person.Event_ID %}
 
-      <section class="event-section" id="event-{{ person.Event_ID }}">
+      <section class="event-section" id="event-{{ person.Event_ID | escape }}">
         <div class="event-section__header">
-          <h2 class="event-section__title">{{ person.Event_Title }}</h2>
+          <h2 class="event-section__title">{{ person.Event_Title | escape }}</h2>
           <h3 class="event-section__meta">
-            {{ person.Event_Start_Date | date: "%A, %B %e, %Y - %I:%M%p" }}
+            {{ person.Event_Start_Date | date: "%A, %B %e, %Y - %I:%M%p" | escape }}
           </h3>
         </div>
 
@@ -51,11 +51,11 @@
             {% assign badge_text = "New to Location" %}
           {% endif %}
         {% endif %}
-        <h2>{{ person.Display_Name }}</h2>
-       <span class="badge badge--type{{ person.New_Type }}"
-      data-type="{{ person.New_Type }}"
+        <h2>{{ person.Display_Name | escape }}</h2>
+       <span class="badge badge--type{{ person.New_Type | escape }}"
+      data-type="{{ person.New_Type | escape }}"
       role="note"
-      aria-label="{{ badge_text }}">
+      aria-label="{{ badge_text | escape }}">
           {% if person.New_Type == 1 %}
             <i class="fas fa-user-plus" aria-hidden="true"></i>
           {% elsif person.New_Type == 2 %}
@@ -65,33 +65,33 @@
           {% elsif person.New_Type == 4 %}
               <i class="fas fa-place-of-worship" aria-hidden="true"></i>
           {% endif %}
-          {{ badge_text }}
+          {{ badge_text | escape }}
         </span>
       </div>
       <div class="card-content">
         <div class="group card-content-section">
           <h6>Group</h6>
-          {{ person.Group_Name }}
+          {{ person.Group_Name | escape }}
           {% assign iso = person.Participant_Start_Date %}
           {% assign ymd = iso | split: 'T' | first %}
           {% assign yyyy = ymd | slice: 0, 4 %}
           {% assign mm   = ymd | slice: 5, 2 | plus: 0 %}
           {% assign dd   = ymd | slice: 8, 2 | plus: 0 %}
   
-          <p>Participant Since: {{ mm }}/{{ dd }}/{{ yyyy }}</p>
+          <p>Participant Since: {{ mm | escape }}/{{ dd | escape }}/{{ yyyy | escape }}</p>
         </div>
   
         {% if person.Last_Event %}
         <div class="last-event card-content-section">
           <h6>Last Event</h6>
-          <p>{{ person.Last_Event }}</p>
+          <p>{{ person.Last_Event | escape }}</p>
         </div>
         {% endif %}
   
         {% if person.Last_Congregation_Event %}
         <div class="last-location-event card-content-section">
           <h6>Last Location Event</h6>
-          <p>{{ person.Last_Congregation_Event }}</p>
+          <p>{{ person.Last_Congregation_Event | escape }}</p>
         </div>
         {% endif %}
   
@@ -101,13 +101,13 @@
           <ul>
             {% if person.Head_1 %}
             <li class="household-contact">
-              <p>{{ person.Head_1 }}</p>
+              <p>{{ person.Head_1 | escape }}</p>
               <div class="icons">
                 {% if person.Head_1_Email %}
-                <a href="mailto:{{ person.Head_1_Email }}"><i class="fas fa-envelope"></i></a>
+                <a href="mailto:{{ person.Head_1_Email | escape }}"><i class="fas fa-envelope"></i></a>
                 {% endif %}
                 {% if person.Head_1_Mobile %}
-                <a href="tel:{{ person.Head_1_Mobile }}"><i class="fas fa-phone"></i></a>
+                <a href="tel:{{ person.Head_1_Mobile | escape }}"><i class="fas fa-phone"></i></a>
                 {% endif %}
               </div>
             </li>
@@ -115,13 +115,13 @@
   
             {% if person.Head_2 %}
             <li class="household-contact">
-              <p>{{ person.Head_2 }}</p>
+              <p>{{ person.Head_2 | escape }}</p>
               <div class="icons">
                 {% if person.Head_2_Email %}
-                <a href="mailto:{{ person.Head_2_Email }}"><i class="fas fa-envelope"></i></a>
+                <a href="mailto:{{ person.Head_2_Email | escape }}"><i class="fas fa-envelope"></i></a>
                 {% endif %}
                 {% if person.Head_2_Mobile %}
-                <a href="tel:{{ person.Head_2_Mobile }}"><i class="fas fa-phone"></i></a>
+                <a href="tel:{{ person.Head_2_Mobile | escape }}"><i class="fas fa-phone"></i></a>
                 {% endif %}
               </div>
             </li>
