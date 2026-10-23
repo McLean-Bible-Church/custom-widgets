@@ -78,9 +78,34 @@
     return `${parseInt(mm, 10)}/${parseInt(dd, 10)}/${yyyy}`;
   }
 
+  // Params end up in an HTML attribute and in the stored-proc call, so only
+  // accept the exact shapes we use: M/D/YYYY dates and numeric IDs (or lists).
+  function isValidParam(key, value) {
+    const k = String(key).replace(/^@+/, "");
+    const v = String(value ?? "").trim();
+    if (k === "Date") return /^\d{1,2}\/\d{1,2}\/\d{4}$/.test(v);
+    return /^\d+(,\d+)*$/.test(v); // one ID or a comma-separated list
+  }
+
   function cleanMap(map) {
-    for (let [k, v] of map) if (!v?.trim()) map.delete(k);
+    for (let [k, v] of map) if (!v?.trim() || !isValidParam(k, v)) map.delete(k);
     return map;
+  }
+
+  // Build the widget element with setAttribute (never an HTML string), so a
+  // value can't break out of the attribute.
+  function createWidgetElement(params) {
+    const el = document.createElement("div");
+    el.id = widgetId;
+    el.setAttribute("data-component", "CustomWidget");
+    el.setAttribute("data-sp", storedProc);
+    el.setAttribute("data-params", params);
+    el.setAttribute("data-template", templatePath);
+    el.setAttribute("data-requireUser", "false");
+    el.setAttribute("data-cache", "false");
+    el.setAttribute("data-host", "mcleanbible");
+    el.setAttribute("data-debug", "true");
+    return el;
   }
 
   function syncParamsToUrl(paramMap) {
@@ -118,16 +143,7 @@
     const widgetRoot = document.getElementById(containerId);
     if (!widgetRoot) return;
 
-    widgetRoot.innerHTML = `
-      <div id="${widgetId}"
-           data-component="CustomWidget"
-           data-sp="${storedProc}"
-           data-params="${newParams}"
-           data-template="${templatePath}"
-           data-requireUser="false"
-           data-cache="false"
-           data-host="mcleanbible"
-           data-debug="true"></div>`;
+    widgetRoot.replaceChildren(createWidgetElement(newParams));
 
     syncParamsToUrl(paramMap);
 
@@ -139,7 +155,7 @@
   // ----- bootstrap params -----
   const paramMap = new Map(
     Array.from(urlParams.entries()).filter(
-      ([k, v]) => allowedKeys.includes(k) && v?.trim()
+      ([k, v]) => allowedKeys.includes(k) && v?.trim() && isValidParam(k, v)
     )
   );
 
@@ -157,22 +173,12 @@
     .join("&");
 
   // Mount widget
-  const tag = `
-    <div id="${widgetId}"
-         data-component="CustomWidget"
-         data-sp="${storedProc}"
-         data-params="${filteredParams}"
-         data-template="${templatePath}"
-         data-requireUser="false"
-         data-cache="false"
-         data-host="mcleanbible"
-         data-debug="true"></div>`;
 
   const widgetRoot = document.getElementById(containerId);
   const loader = document.getElementById("loader");
   if (widgetRoot) {
     if (loader) loader.classList.remove("hidden");
-    widgetRoot.innerHTML = tag;
+    widgetRoot.replaceChildren(createWidgetElement(filteredParams));
 
     const waitForReInit = setInterval(() => {
       if (typeof window.ReInitWidget === "function") {
