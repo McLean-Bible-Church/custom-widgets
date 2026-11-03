@@ -1,0 +1,19 @@
+# Every change requires review from @In-My-Head.
+#
+# Pages on my.mcleanbible.org load this repo's JS, CSS and Liquid templates
+# straight from GitHub Pages, in the same origin that holds MinistryPlatform
+# login tokens. Anything merged to main is live script on those pages, so the
+# `require-secret-scan` ruleset on main requires an approving code-owner review.
+# Admins can bypass the review via pull request so the owner can merge their own
+# work (GitHub does not allow approving your own PR); direct pushes stay blocked.
+#
+# Adding staff later: give them write access (so they can push branches and open
+# PRs) and leave this file alone. Only add a second owner here if you want that
+# person's review to satisfy the requirement on its own.
+
+*                   @In-My-Head
+
+# Called out explicitly so they stay owned even if the catch-all changes.
+**/*.js             @In-My-Head
+**/Template/**      @In-My-Head
+/.github/           @In-My-Head
