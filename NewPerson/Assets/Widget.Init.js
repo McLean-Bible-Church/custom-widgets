@@ -104,7 +104,6 @@
     el.setAttribute("data-requireUser", "false");
     el.setAttribute("data-cache", "false");
     el.setAttribute("data-host", "mcleanbible");
-    el.setAttribute("data-debug", "true");
     return el;
   }
 
