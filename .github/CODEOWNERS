@@ -1,4 +1,5 @@
-# Every change requires review from @In-My-Head.
+# Every change requires review from @McLean-Bible-Church/code-approvers
+# (members: Matt only).
 #
 # Pages on my.mcleanbible.org load this repo's JS, CSS and Liquid templates
 # straight from GitHub Pages, in the same origin that holds MinistryPlatform
@@ -8,12 +9,13 @@
 # work (GitHub does not allow approving your own PR); direct pushes stay blocked.
 #
 # Adding staff later: give them write access (so they can push branches and open
-# PRs) and leave this file alone. Only add a second owner here if you want that
-# person's review to satisfy the requirement on its own.
+# PRs) and leave this file alone. Only add a second owner here (or to the
+# code-approvers team) if you want that person's review to satisfy the
+# requirement on its own.
 
-*                   @In-My-Head
+*                   @McLean-Bible-Church/code-approvers
 
 # Called out explicitly so they stay owned even if the catch-all changes.
-**/*.js             @In-My-Head
-**/Template/**      @In-My-Head
-/.github/           @In-My-Head
+**/*.js             @McLean-Bible-Church/code-approvers
+**/Template/**      @McLean-Bible-Church/code-approvers
+/.github/           @McLean-Bible-Church/code-approvers
